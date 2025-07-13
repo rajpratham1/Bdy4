@@ -1,0 +1,393 @@
+/* --- Fonts --- */
+/* Shadows Into Light: For a handwritten feel */
+/* Amatic SC: For bold titles */
+
+/* --- General Styles --- */
+body {
+    font-family: 'Shadows Into Light', cursive;
+    margin: 0;
+    padding: 0;
+    background-color: #f0e6d2; /* Light cream/paper background */
+    
+    /* Ensure pages are scrollable */
+    overflow-x: hidden; 
+    overflow-y: auto; 
+    
+    color: #4a4a4a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Specific body adjustments for pages where content might not fill the screen (like the cover) */
+.scrapbook-cover, .note-page, .final-page {
+    /* Ensure these pages are centered when content is short, but still allow scrolling if needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- Scrapbook Cover Styles (index.html) --- */
+.book-container {
+    perspective: 1500px; /* For 3D rotation */
+    width: 600px;
+    height: 800px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 2s ease-in-out;
+}
+
+.book-cover {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: #fbf5e7; /* Inner cover paper texture */
+    border: 5px solid #d4c2a8;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+}
+
+.front-cover {
+    z-index: 2;
+    transform-origin: left center;
+    transition: transform 1.5s ease-in-out;
+    background-image: url('images/paper_texture.jpg'); 
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    
+    background-color: #f8e4d2;
+}
+
+.back-cover {
+    z-index: 1;
+    background-color: #f8e4d2;
+}
+
+.cover-title {
+    font-family: 'Amatic SC', cursive;
+    font-size: 6em;
+    color: #8b4513; 
+    margin-bottom: 0;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.cover-subtitle {
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 2.5em;
+    color: #5d3a1f;
+    margin-top: 5px;
+}
+
+.latch {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    font-size: 3em;
+    color: #6a1b9a;
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+    animation: pulse 1.5s infinite;
+}
+
+.latch:hover {
+    color: #420d64;
+    transform: translateY(-50%) rotate(90deg) scale(1.1);
+}
+
+.ribbon {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    width: 15px;
+    background-color: #b71c1c; 
+    box-shadow: inset 2px 0 5px rgba(0,0,0,0.2);
+}
+
+/* --- Book Open State (Controlled by JS) --- */
+.book-container.open .front-cover {
+    transform: rotateY(-180deg);
+    z-index: 3;
+}
+
+/* Hide cover content when open */
+.book-container.open .cover-title,
+.book-container.open .cover-subtitle,
+.book-container.open .latch {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+/* --- Page Content General --- */
+.page-content {
+    padding: 40px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    max-width: 800px;
+    margin: 50px auto;
+    min-height: 80vh;
+}
+
+.page-content h1 {
+    font-family: 'Amatic SC', cursive;
+    font-size: 4em;
+    color: #8b4513;
+    text-align: center;
+}
+
+.next-btn {
+    display: block;
+    width: 200px;
+    margin: 40px auto 20px auto;
+    padding: 15px;
+    background-color: #b71c1c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 1.5em;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.next-btn:hover {
+    background-color: #8c1616;
+    transform: translateY(-3px);
+}
+
+/* --- Timeline Page (timeline.html) --- */
+.timeline {
+    position: relative;
+    max-width: 100%;
+    padding: 40px 0;
+}
+
+/* Timeline vertical line */
+.timeline::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    background-color: #d4c2a8;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -2px;
+}
+
+.timeline-item {
+    padding: 10px 40px;
+    position: relative;
+    background-color: inherit;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+.timeline-item:nth-child(even) {
+    left: 50%;
+}
+
+/* Dot on the timeline */
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background-color: #8b4513;
+    border: 4px solid #fbf5e7;
+    top: 15px;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.timeline-item:nth-child(odd)::after {
+    right: -17px;
+}
+
+.timeline-item:nth-child(even)::after {
+    left: -17px;
+}
+
+.timeline-date {
+    font-family: 'Amatic SC', cursive;
+    font-size: 2em;
+    color: #b71c1c;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.timeline-content {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.timeline-title {
+    font-family: 'Amatic SC', cursive;
+    font-size: 2.5em;
+    color: #4a4a4a;
+    margin-bottom: 5px;
+}
+
+.timeline-item p {
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 1.2em;
+    line-height: 1.4;
+}
+
+/* --- Polaroid Page (polaroids.html) --- */
+.polaroids-container {
+    background-color: #fbf5e7;
+    text-align: center;
+}
+
+.polaroid-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 50px;
+    padding: 30px 0;
+}
+
+.polaroid-card {
+    background-color: #fff;
+    padding: 15px 15px 50px 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    /* CSS variables for rotation applied in HTML */
+    transform: rotate(var(--rotation, 0deg));
+    position: relative;
+}
+
+.polaroid-card:hover {
+    transform: rotate(0deg) scale(1.05);
+    z-index: 10;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.polaroid-image img {
+    max-width: 250px;
+    height: auto;
+    display: block;
+    border: 1px solid #ccc;
+}
+
+.polaroid-caption {
+    text-align: center;
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 1.5em;
+    color: #333;
+    margin-top: 10px;
+}
+
+/* Classes for specific rotation angles */
+.rotate-1 { transform: rotate(-5deg); }
+.rotate-2 { transform: rotate(8deg); }
+.rotate-3 { transform: rotate(3deg); }
+
+/* --- Note Page (note.html) --- */
+.note-page {
+    background-color: #fdf6e3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.note-paper {
+    background-color: #fef8e7;
+    padding: 60px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    max-width: 700px;
+    border: 1px solid #ddd;
+    line-height: 1.6;
+    
+    /* Add a subtle tear/crumple look if desired via a background image or specific CSS */
+}
+
+.note-title {
+    font-family: 'Amatic SC', cursive;
+    font-size: 4em;
+    color: #8b4513;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.handwritten-text {
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 1.6em;
+    color: #4a4a4a;
+    text-align: left;
+    margin-bottom: 25px;
+}
+
+.note-signature {
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 2em;
+    margin-top: 50px;
+    text-align: right;
+    color: #b71c1c;
+}
+
+/* --- Final Page (final.html) --- */
+.final-page {
+    background: linear-gradient(to top, #ffcc80, #ff8a80);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.final-message-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    text-align: center;
+    padding: 60px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    z-index: 5;
+}
+
+.final-message-container h1 {
+    font-family: 'Amatic SC', cursive;
+    font-size: 6em;
+    color: #e91e63;
+    margin-bottom: 20px;
+    animation: bounceIn 1.5s;
+}
+
+.final-tribute {
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 1.8em;
+    color: #4a4a4a;
+    line-height: 1.6;
+}
+
+/* Animations */
+@keyframes pulse {
+    /* (existing pulse animation for latch) */
+}
+
+@keyframes bounceIn {
+    0%, 20%, 40%, 60%, 80%, 100% {
+        transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    }
+    0% {
+        opacity: 0;
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+    100% {
+        opacity: 1;
+        transform: scale3d(1, 1, 1);
+    }
+}
